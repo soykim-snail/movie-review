@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>DETAIL</h1>
+여기에 영화 내용이 나옵니다
+
+<p>영화명 {{ movie.title }}</p>
+<p>누적 관객수 {{ movie.audience }}</p>
+<p>개봉일 {{ movie.open_date }}</p>
+<p>장르 {{ movie.genre }}</p>
+<p>관람등급 {{ movie.watch_grade }}</p>
+<p>평점 {{ movie.score }}</p>
+<p>포스터 이미지 URL {{ movie.poster_url }}</p>
+<p>영화 소개 {{ movie.description }}</p>
+
+<a href="{% url 'movies:index' %}">목록</a><br>
+<a href="{% url 'movies:update' movie.pk %}">수정</a><br>
+
+<form action="{% url 'movies:delete' movie.pk %}" method="POST">
+    {% csrf_token %}
+    <button>삭제</button>
+</form>
+
+
+
+{% endblock  %}
