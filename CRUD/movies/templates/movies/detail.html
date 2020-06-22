@@ -1,26 +1,43 @@
 {% extends 'base.html' %}
 
+{% load bootstrap4 %}
+
 {% block content %}
 <h1>DETAIL</h1>
-여기에 영화 내용이 나옵니다
+<p>영화명 : {{ movie.title }}</p>
+<p>누적 관객수 : {{ movie.audience }}</p>
+<p>개봉일 : {{ movie.open_date }}</p>
+<p>장르 : {{ movie.genre }}</p>
+<p>관람등급 : {{ movie.watch_grade }}</p>
+<p>평점 : {{ movie.score }}</p>
+<p>포스터 이미지 URL : {{ movie.poster_url }}</p>
+<p>영화 소개 : {{ movie.description }}</p>
 
-<p>영화명 {{ movie.title }}</p>
-<p>누적 관객수 {{ movie.audience }}</p>
-<p>개봉일 {{ movie.open_date }}</p>
-<p>장르 {{ movie.genre }}</p>
-<p>관람등급 {{ movie.watch_grade }}</p>
-<p>평점 {{ movie.score }}</p>
-<p>포스터 이미지 URL {{ movie.poster_url }}</p>
-<p>영화 소개 {{ movie.description }}</p>
 
-<a href="{% url 'movies:index' %}">목록</a><br>
-<a href="{% url 'movies:update' movie.pk %}">수정</a><br>
+
+<a href="{% url 'movies:index' %}"><span class="badge badge-secondary">목록</span></a>
+<a href="{% url 'movies:update' movie.pk %}"><span class="badge badge-success">수정</span></a>
 
 <form action="{% url 'movies:delete' movie.pk %}" method="POST">
     {% csrf_token %}
-    <button>삭제</button>
+    <button class="btn btn-danger">삭제</button>
 </form>
-
-
+<hr>
+<form action="{% url 'movies:comment_create' movie.pk %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}     
+    <button class='btn btn-warning'>코멘트작성</button>
+</form>
+<hr>
+<h2>코멘트 보기</h2>
+{% for comment in comments %}
+   <form action="{% url 'movies:comment_delete' movie.pk comment.pk %}" method="POST" class="form-inline">
+        <div class="row">
+             <div class="col">{{ comment.content }}</div>       
+            {% csrf_token %}
+            <button class="btn btn-danger btn-sm">삭제</button>
+        </div>
+   </form>
+{% endfor %}
 
 {% endblock  %}
